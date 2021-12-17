@@ -16,9 +16,7 @@ fetch("http://localhost:3000/api/products")
 /*déclaration de la fonction*/
 function displayProduct(data){
     console.table(data);
-    for (let i = 0; i < data.length; i++) {
-        console.log(i);
-    }
+    
     document.getElementById('items').innerHTML = data.map((data) => `
         <a href="./product.html?id=${data._id} ">
         <article>
@@ -26,5 +24,6 @@ function displayProduct(data){
             <h3 class="productName">${data.name}</h3>
             <p class="productDescription">${data.description}</p>
         </article>
-    `)
+    `).join('');
+
 }
