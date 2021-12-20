@@ -25,5 +25,4 @@ function displayProduct(data){
             <p class="productDescription">${data.description}</p>
         </article>
     `).join('');
-
 }
