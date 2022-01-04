@@ -34,14 +34,7 @@ fetch("http://localhost:3000/api/products/" + idProduct)
 
 //déclaration de la fonction
 function product(data) {
-    console.log(data);
-    
-    for (let i = 0; i < data.colors.length; i++) {
-        console.log(data.colors[i]);
-        
-        document.getElementById("colors").innerHTML = document.getElementById("colors").innerHTML + `<option value="${data.colors[i]}">${data.colors[i]}</option>`;
-    }
-
+    console.table(data);
     
     document.getElementsByClassName("item__img")[0].innerHTML = `
         <img src="${data.imageUrl}" alt="${data.altTxt}" />
@@ -53,5 +46,61 @@ function product(data) {
     document.getElementById("description").innerHTML = `
         <p id="description">${data.description}</p>
     `
+
+    /*for (let i = 0; i < data.colors.length; i++) {
+        console.log(data.colors[i]);
+        
+        document.getElementById("colors").innerHTML = document.getElementById("colors").innerHTML + `<option value="${data.colors[i]}">${data.colors[i]}</option>`;
+    }*/
+
+    document.getElementById("colors").innerHTML += data.colors.map((data) => `
+        <option value="">${data} </option>
+        
+    `)
 }
 
+//ajout au panier
+
+const btn_envoyerPanier = document.querySelector("#addToCart");
+
+btn_envoyerPanier.addEventListener("click", event => addToCart(event));
+
+
+function addToCart(e) {
+    //1 recuperation de donnée
+    let quantite = document.getElementById("quantity").value;
+    
+    let selectionCouleur = document.getElementById("colors");
+    let couleur = selectionCouleur.options[selectionCouleur.selectedIndex].text;
+    
+    console.log(quantite);
+    console.log(couleur);    
+
+    //2 control des données
+    /*
+    if (quantite > 0 && quantite < 100) {
+        window.alert("Merci d'avoir renseignez la quantité")
+    }
+    else {
+        window.alert("Séléctionnez une quantité, SVP")
+    }
+    
+    
+    if (couleur = true) {
+        window.alert("Merci d'avoir renseignez la couleur")
+    }
+    else {
+        window.alert("Séléctionnez une couleur")
+    }*/
+
+    
+    if (couleur = true){
+        window.alert("Sélectionnez une couleur SVP")
+    }
+    else {
+        window.alert("Merci d'avoir sélectionnez une couleur")
+    }
+    
+
+    //3 local storage
+}
