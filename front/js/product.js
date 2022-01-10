@@ -54,7 +54,7 @@ function product(data) {
     }*/
 
     document.getElementById("colors").innerHTML += data.colors.map((data) => `
-        <option value="">${data} </option>
+        <option value="${data}">${data}</option>
         
     `)
 }
@@ -71,13 +71,13 @@ function addToCart(e) {
     let quantite = document.getElementById("quantity").value;
     
     let selectionCouleur = document.getElementById("colors");
-    let couleur = selectionCouleur.options[selectionCouleur.selectedIndex].text;
+    let couleur = selectionCouleur.options[selectionCouleur.selectedIndex].value;
     
     console.log(quantite);
-    console.log(couleur);    
-
+    console.log(couleur);
+    
     //2 control des données
-    /*
+    
     if (quantite > 0 && quantite < 100) {
         window.alert("Merci d'avoir renseignez la quantité")
     }
@@ -86,21 +86,26 @@ function addToCart(e) {
     }
     
     
-    if (couleur = true) {
+    if (couleur == "") {
+        window.alert("Séléctionnez une couleur")
+    }
+    else {
         window.alert("Merci d'avoir renseignez la couleur")
     }
-    else {
-        window.alert("Séléctionnez une couleur")
-    }*/
-
-    
-    if (couleur = true){
-        window.alert("Sélectionnez une couleur SVP")
-    }
-    else {
-        window.alert("Merci d'avoir sélectionnez une couleur")
-    }
-    
 
     //3 local storage
+    let infoProduit = [
+        {idProduit:idProduct,
+        quantiteProduit:quantite,
+        couleurProduit:couleur}
+    ];
+
+    console.log(infoProduit);
+
+    localStorage.setItem("infoProduit",JSON.stringify(infoProduit));
+
+    
+    
+
+    
 }
