@@ -77,15 +77,6 @@ function addToCart(e) {
     console.log(couleur);
     
     //2 control des données
-    
-    if (quantite > 0 && quantite < 100) {
-        window.alert("Merci d'avoir renseignez la quantité")
-    }
-    else {
-        window.alert("Séléctionnez une quantité, SVP")
-    }
-    
-    
     if (couleur == "") {
         window.alert("Séléctionnez une couleur")
     }
@@ -93,6 +84,13 @@ function addToCart(e) {
         window.alert("Merci d'avoir renseignez la couleur")
     }
 
+    if (quantite > 0 && quantite < 100) {
+        window.alert("Merci d'avoir renseignez la quantité")
+    }
+    else {
+        window.alert("Séléctionnez une quantité, SVP")
+    }
+    
     //3 local storage
     let infoProduit = [
         {idProduit:idProduct,
@@ -104,7 +102,7 @@ function addToCart(e) {
 
     localStorage.setItem("infoProduit",JSON.stringify(infoProduit));
 
-    
+
     
 
     
