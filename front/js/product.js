@@ -13,8 +13,6 @@ const urlSearchParams = new URLSearchParams(queryString_url_id);
 console.log(urlSearchParams);
 
 const idProduct = urlSearchParams.get("id")
-console.log(idProduct);
-
 
 //affichage du produit qui a été sélectionné par l'id
 //utilisation de fetch en mettant la valeur de l'id a la fin de l'url
@@ -34,7 +32,6 @@ fetch("http://localhost:3000/api/products/" + idProduct)
 
 //déclaration de la fonction
 function product(data) {
-    console.table(data);
     
     document.getElementsByClassName("item__img")[0].innerHTML = `
         <img src="${data.imageUrl}" alt="${data.altTxt}" />
@@ -73,9 +70,6 @@ function addToCart(e) {
     let selectionCouleur = document.getElementById("colors");
     let couleur = selectionCouleur.options[selectionCouleur.selectedIndex].value;
     
-    console.log(quantite);
-    console.log(couleur);
-    
     //2 control des données
     if (couleur == "") {
         window.alert("Séléctionnez une couleur")
@@ -92,18 +86,26 @@ function addToCart(e) {
     }
     
     //3 local storage
-    let infoProduit = [
-        {idProduit:idProduct,
+    //information et options produit
+    let infoProduit = {
+        idProduit:idProduct,
         quantiteProduit:quantite,
-        couleurProduit:couleur}
-    ];
+        couleurProduit:couleur
+    };
 
-    console.log(infoProduit);
+    //variable dans laquelle on met les key et les values
+    let produitLocalStorage = JSON.parse(localStorage.getItem("produit"))
 
-    localStorage.setItem("infoProduit",JSON.stringify(infoProduit));
+    //condition: si il y a un produit dans le local storage
+    if(produitLocalStorage){
+        produitLocalStorage.push(infoProduit);
+        localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+    }
 
-
-    
-
-    
+    //condition: si il n'y a pas de produit dans le local storage
+    else{
+        produitLocalStorage = [];
+        produitLocalStorage.push(infoProduit);
+        localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+    }
 }
