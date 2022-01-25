@@ -66,12 +66,12 @@ btn_envoyerPanier.addEventListener("click", event => addToCart(event));
 function addToCart(e) {
     //1 recuperation de donnée
     let quantite = document.getElementById("quantity").value;
-    
+
     let selectionCouleur = document.getElementById("colors");
     let couleur = selectionCouleur.options[selectionCouleur.selectedIndex].value;
     
     //2 control des données
-    if (couleur == "") {
+    /*if (couleur == "") {
         window.alert("Séléctionnez une couleur")
     }
     else {
@@ -83,7 +83,7 @@ function addToCart(e) {
     }
     else {
         window.alert("Séléctionnez une quantité, SVP")
-    }
+    }*/
     
     //3 local storage
     //information et options produit
@@ -93,19 +93,36 @@ function addToCart(e) {
         couleurProduit:couleur
     };
 
+    console.log(infoProduit);
+
     //variable dans laquelle on met les key et les values
     let produitLocalStorage = JSON.parse(localStorage.getItem("produit"))
 
-    //condition: si il y a un produit dans le local storage
-    if(produitLocalStorage){
-        produitLocalStorage.push(infoProduit);
-        localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
-    }
+    //condition obliger de renseigner correctement les informations
+    if(couleur != "" && quantite > 0 && quantite < 100){
+        
+         //condition: si il y a un produit dans le local storage
+        if(produitLocalStorage){
+            produitLocalStorage.push(infoProduit);
+            localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+        }
 
-    //condition: si il n'y a pas de produit dans le local storage
-    else{
-        produitLocalStorage = [];
-        produitLocalStorage.push(infoProduit);
-        localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+        //condition: si il n'y a pas de produit dans le local storage
+        else{
+            produitLocalStorage = [];
+            produitLocalStorage.push(infoProduit);
+            localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+        }
+        
+        if(window.confirm("Cliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
+            window.location.href = "cart.html"
+        }
+        else{
+            window.location.href = "index.html"
+        } 
     }
+    else{
+        window.alert("couleur ou quantité non renseigner, veuillez reéssayer !! ")
+    }
+   
 }
