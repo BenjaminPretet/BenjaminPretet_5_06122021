@@ -70,7 +70,6 @@ function displayProductPanier(data, infoProduitPanier){
     function deleteItem(e){
         console.log("test");
     }*/
-
 }
 
 
