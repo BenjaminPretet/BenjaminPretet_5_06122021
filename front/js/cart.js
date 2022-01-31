@@ -9,26 +9,29 @@ console.log(produitPanier);
 
 let tableauPanier = [];
 
-for(let i = 0; i < produitPanier.length; i++){
+async function getData(){
+    for(let i = 0; i < produitPanier.length; i++){
 
-    fetch(`http://localhost:3000/api/products/${produitPanier[i].idProduit}`)
-        .then(function(res){
-            if (res.ok) {
-                return res.json();
-            }
-        })
-        .then(function(value) {
-            displayProductPanier(value, produitPanier[i]);
-        })
-        .catch(function(err){
-            console.log(err);
-        });
-
+        fetch(`http://localhost:3000/api/products/${produitPanier[i].idProduit}`)
+            .then(function(res){
+                if (res.ok) {
+                    return res.json();
+                }
+            })
+            .then(function(value) {
+                displayProductPanier(value, produitPanier[i]);
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+    }
 }
 
-function displayProductPanier(data, infoProduitPanier){
 
-    console.log(infoProduitPanier);
+getData()
+
+
+function displayProductPanier(data, infoProduitPanier){
 
     document.getElementById("cart__items").innerHTML = document.getElementById("cart__items").innerHTML + `
         <article class="cart__item" data-id="${infoProduitPanier.idProduit} " data-color="${infoProduitPanier.couleurProduit}">
@@ -53,4 +56,22 @@ function displayProductPanier(data, infoProduitPanier){
             </div>
         </article>
     `;
+
+    /*
+    const btn_supprimeProduit = document.querySelectorAll(".deleteItem");
+
+    console.log(btn_supprimeProduit);
+    
+    for(let btn of btn_supprimeProduit){
+        btn.addEventListener("click", event => deleteItem(event));
+        console.log(btn);
+    }
+    
+    function deleteItem(e){
+        console.log("test");
+    }*/
+
 }
+
+
+
