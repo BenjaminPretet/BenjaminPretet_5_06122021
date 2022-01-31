@@ -99,30 +99,40 @@ function addToCart(e) {
     let produitLocalStorage = JSON.parse(localStorage.getItem("produit"))
 
     //condition obliger de renseigner correctement les informations
+    
+    //création constante de vérification de produit dans le local storage
+
     if(couleur != "" && quantite > 0 && quantite < 100){
         
-         //condition: si il y a un produit dans le local storage
-        if(produitLocalStorage){
-            produitLocalStorage.push(infoProduit);
-            localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
-        }
-
         //condition: si il n'y a pas de produit dans le local storage
-        else{
+       if(produitLocalStorage == null){
             produitLocalStorage = [];
-            produitLocalStorage.push(infoProduit);
-            localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
-        }
-        
-        if(window.confirm("Cliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
-            window.location.href = "cart.html"
-        }
-        else{
-            window.location.href = "index.html"
-        } 
-    }
-    else{
-        window.alert("couleur ou quantité non renseigner, veuillez reéssayer !! ")
-    }
-   
+       }
+       
+       //condition: si il y a un produit dans le local storage
+       else{
+           
+       }
+       // inverser les condition => if = null alors crée un tableau
+       produitLocalStorage.push(infoProduit);
+       localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+       
+       //comparatif id et option couleur pour additionné les quantitées
+       /*if(){
+
+       }
+       else(){
+
+       }*/
+
+       if(window.confirm("Cliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
+           window.location.href = "cart.html"
+       }
+       else{
+           window.location.href = "index.html"
+       } 
+   }
+   else{
+       window.alert("couleur ou quantité non renseigner, veuillez reéssayer !! ")
+   }
 }
