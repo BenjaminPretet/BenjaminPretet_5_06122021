@@ -1,11 +1,11 @@
 //Récupération des informations dans le local storage
 let produitLocalStorage = JSON.parse(localStorage.getItem("produit"))
-console.log(produitLocalStorage);
+//console.log(produitLocalStorage);
 
 //Affichage des produits dans le panier
 
 let produitPanier = produitLocalStorage;
-console.log(produitPanier);
+//console.log(produitPanier);
 
 let tableauPanier = [];
 
@@ -30,7 +30,7 @@ async function getData(){
 
 getData()
 
-
+//affichage des atricles dans le panier
 function displayProductPanier(data, infoProduitPanier){
 
     document.getElementById("cart__items").innerHTML = document.getElementById("cart__items").innerHTML + `
@@ -57,20 +57,57 @@ function displayProductPanier(data, infoProduitPanier){
         </article>
     `;
 
-    /*
+
+    //console.log(data);
+
+    //calcul de la quantité total d'article et du prix total
+    //quantité total
+    let produitQuantite = document.getElementsByClassName("itemQuantity");
+    let monTotal = produitQuantite.length;
+
+    //Quantité total d'articles
+    totalQuantite = 0;
+
+    for(let i = 0; i < monTotal; i++){
+        totalQuantite += produitQuantite[i].valueAsNumber;
+    }
+
+    let quantiteTotalProduit = document.getElementById("totalQuantity");
+    quantiteTotalProduit.innerHTML = totalQuantite;
+
+    //console.log(totalQuantite);
+
+    //Prix total
+    totalPrice = 0;
+
+    for(let i = 0; i < monTotal; i++){
+        totalPrice += (produitQuantite[i].valueAsNumber * data.price);
+    }
+
+    let produitTtotalPrice = document.getElementById("totalPrice");
+    produitTtotalPrice.innerHTML = totalPrice;
+    console.log(totalPrice);
+
+
+    
     const btn_supprimeProduit = document.querySelectorAll(".deleteItem");
 
-    console.log(btn_supprimeProduit);
+    //console.log(btn_supprimeProduit);
     
     for(let btn of btn_supprimeProduit){
         btn.addEventListener("click", event => deleteItem(event));
-        console.log(btn);
+        //console.log(btn);
     }
     
     function deleteItem(e){
         console.log("test");
-    }*/
+    }
+    
+
+    
 }
+
+
 
 
 
