@@ -9,7 +9,7 @@ let produitPanier = produitLocalStorage;
 
 let tableauPanier = [];
 
-async function getData(){
+/*async function getData(){
     for(let i = 0; i < produitPanier.length; i++){
 
         fetch(`http://localhost:3000/api/products/${produitPanier[i].idProduit}`)
@@ -25,13 +25,38 @@ async function getData(){
                 console.log(err);
             });
     }
+}*/
+
+async function getData(id){
+        fetch(`http://localhost:3000/api/products/${id}`)
+            .then(function(res){
+                if (res.ok) {
+                    return res.json();
+                }
+            })
+            .then(function(value) {
+                return value;
+            })
+            .catch(function(err){
+                console.log(err);
+            });
+    
 }
 
 
-getData()
+async function init(){
+    for(let i = 0; i < produitPanier.length; i++){
+        const value = await getData(produitPanier[i].idProduit);
+        displayProductPanier(value, produitPanier[i])
+    } 
+}
+
+init()
+
+
 
 //affichage des atricles dans le panier
-function displayProductPanier(data, infoProduitPanier){
+async function displayProductPanier(data, infoProduitPanier){
 
     document.getElementById("cart__items").innerHTML = document.getElementById("cart__items").innerHTML + `
         <article class="cart__item" data-id="${infoProduitPanier.idProduit} " data-color="${infoProduitPanier.couleurProduit}">
@@ -58,41 +83,9 @@ function displayProductPanier(data, infoProduitPanier){
     `;
 
 
-    //console.log(data);
 
-    //calcul de la quantité total d'article et du prix total
-    //quantité total
-    let produitQuantite = document.getElementsByClassName("itemQuantity");
-    let monTotal = produitQuantite.length;
-
-    //Quantité total d'articles
-    totalQuantite = 0;
-
-    for(let i = 0; i < monTotal; i++){
-        totalQuantite += produitQuantite[i].valueAsNumber;
-    }
-
-    let quantiteTotalProduit = document.getElementById("totalQuantity");
-    quantiteTotalProduit.innerHTML = totalQuantite;
-
-    //console.log(totalQuantite);
-
-    //Prix total
-    totalPrice = 0;
-
-    for(let i = 0; i < monTotal; i++){
-        totalPrice += (produitQuantite[i].valueAsNumber * data.price);
-    }
-
-    let produitTtotalPrice = document.getElementById("totalPrice");
-    produitTtotalPrice.innerHTML = totalPrice;
-    console.log(totalPrice);
-
-
-    
+    //Supprimer un article
     const btn_supprimeProduit = document.querySelectorAll(".deleteItem");
-
-    //console.log(btn_supprimeProduit);
     
     for(let btn of btn_supprimeProduit){
         btn.addEventListener("click", event => deleteItem(event));
@@ -101,11 +94,49 @@ function displayProductPanier(data, infoProduitPanier){
     
     function deleteItem(e){
         console.log("test");
+        
     }
     
 
     
 }
+
+async function prixTotal(){
+
+    //calcul de la quantité total d'article et du prix total en fonction du nombre d'articles
+    //quantité total
+    let produitQuantite = document.getElementsByClassName("itemQuantity");
+    let monTotal = produitQuantite.length;
+
+    console.log(monTotal);
+
+    //Quantité total d'articles
+    let totalQuantite = 0;
+
+    for(let i = 0; i < monTotal; i++){
+        totalQuantite += produitQuantite[i].valueAsNumber;
+        console.log(produitQuantite[i].valueAsNumber);
+    }
+
+    let quantiteTotalProduit = document.getElementById("totalQuantity");
+    quantiteTotalProduit.innerHTML = totalQuantite;
+
+    console.log(produitQuantite);
+    console.log(totalQuantite);
+
+    /*
+    //Prix total
+    let totalPrice = 0;
+
+    for(let i = 0; i < monTotal; i++){
+        totalPrice += (produitQuantite[i].valueAsNumber * data.price);
+    }
+
+    let produitTtotalPrice = document.getElementById("totalPrice");
+    produitTtotalPrice.innerHTML = totalPrice;
+    console.log(totalPrice);*/
+}
+
 
 
 
