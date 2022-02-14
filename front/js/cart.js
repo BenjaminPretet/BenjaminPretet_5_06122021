@@ -28,7 +28,7 @@ let tableauPanier = [];
 }*/
 
 async function getData(id){
-        fetch(`http://localhost:3000/api/products/${id}`)
+        const data = await fetch(`http://localhost:3000/api/products/${id}`)
             .then(function(res){
                 if (res.ok) {
                     return res.json();
@@ -40,20 +40,19 @@ async function getData(id){
             .catch(function(err){
                 console.log(err);
             });
+
+            return data;
     
 }
-
 
 async function init(){
     for(let i = 0; i < produitPanier.length; i++){
         const value = await getData(produitPanier[i].idProduit);
         displayProductPanier(value, produitPanier[i])
     } 
+    prixTotal();
 }
-
 init()
-
-
 
 //affichage des atricles dans le panier
 async function displayProductPanier(data, infoProduitPanier){
@@ -67,7 +66,7 @@ async function displayProductPanier(data, infoProduitPanier){
                 <div class="cart__item__content__description">
                     <h2>${data.name}</h2>
                     <p>${infoProduitPanier.couleurProduit}</p>
-                    <p>${data.price} €</p>
+                    <p class="price">${data.price} €</p>
                 </div>
                 <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity">
@@ -82,8 +81,6 @@ async function displayProductPanier(data, infoProduitPanier){
         </article>
     `;
 
-
-
     //Supprimer un article
     const btn_supprimeProduit = document.querySelectorAll(".deleteItem");
     
@@ -95,10 +92,7 @@ async function displayProductPanier(data, infoProduitPanier){
     function deleteItem(e){
         console.log("test");
         
-    }
-    
-
-    
+    }   
 }
 
 async function prixTotal(){
@@ -106,35 +100,34 @@ async function prixTotal(){
     //calcul de la quantité total d'article et du prix total en fonction du nombre d'articles
     //quantité total
     let produitQuantite = document.getElementsByClassName("itemQuantity");
-    let monTotal = produitQuantite.length;
-
-    console.log(monTotal);
-
-    //Quantité total d'articles
     let totalQuantite = 0;
+    console.log(produitQuantite);
 
-    for(let i = 0; i < monTotal; i++){
+    //prix total
+    let produitPrice = document.getElementsByClassName("price")
+    let totalPrice = 0
+
+    for(let i = 0; i < produitQuantite.length; i++){
+        let valueQuantite = produitQuantite[i].value;
         totalQuantite += produitQuantite[i].valueAsNumber;
-        console.log(produitQuantite[i].valueAsNumber);
+
+        let valuePrice = produitPrice[i].innerHTML;
+        let price = valuePrice.replace(" €", "");
+        
+        //console.log(valueQuantite);
+        //console.log(valuePrice);
+        //console.log(parseInt(price) * parseInt(valueQuantite));
+
+        totalPrice += parseInt(price) * parseInt(valueQuantite);
+        console.log(totalPrice);
     }
 
     let quantiteTotalProduit = document.getElementById("totalQuantity");
     quantiteTotalProduit.innerHTML = totalQuantite;
-
-    console.log(produitQuantite);
-    console.log(totalQuantite);
-
-    /*
-    //Prix total
-    let totalPrice = 0;
-
-    for(let i = 0; i < monTotal; i++){
-        totalPrice += (produitQuantite[i].valueAsNumber * data.price);
-    }
-
-    let produitTtotalPrice = document.getElementById("totalPrice");
-    produitTtotalPrice.innerHTML = totalPrice;
-    console.log(totalPrice);*/
+    
+    let prixTotalProduit = document.getElementById("totalPrice");
+    prixTotalProduit.innerHTML = totalPrice;
+    
 }
 
 
