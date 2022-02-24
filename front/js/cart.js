@@ -5,7 +5,7 @@ let produitLocalStorage = JSON.parse(localStorage.getItem("produit"))
 //Affichage des produits dans le panier
 
 let produitPanier = produitLocalStorage;
-//console.log(produitPanier);
+console.log(produitPanier);
 
 let tableauPanier = [];
 
@@ -49,6 +49,13 @@ async function init(){
     for(let i = 0; i < produitPanier.length; i++){
         const value = await getData(produitPanier[i].idProduit);
         displayProductPanier(value, produitPanier[i])
+
+        // test variable pour suppression de produit
+        let idSupprime = produitPanier[i].idProduit
+        let couleurSupprime = produitPanier[i].couleurProduit
+        console.log(idSupprime);
+        console.log(couleurSupprime);
+        
     } 
     prixTotal();
 }
@@ -87,12 +94,15 @@ async function displayProductPanier(data, infoProduitPanier){
     for(let btn of btn_supprimeProduit){
         btn.addEventListener("click", event => deleteItem(event));
         //console.log(btn);
+
     }
     
     function deleteItem(e){
         console.log("test");
         
     }   
+
+    deleteItem();
 }
 
 async function prixTotal(){
@@ -101,7 +111,7 @@ async function prixTotal(){
     //quantité total
     let produitQuantite = document.getElementsByClassName("itemQuantity");
     let totalQuantite = 0;
-    console.log(produitQuantite);
+    //console.log(produitQuantite);
 
     //prix total
     let produitPrice = document.getElementsByClassName("price")
@@ -119,7 +129,7 @@ async function prixTotal(){
         //console.log(parseInt(price) * parseInt(valueQuantite));
 
         totalPrice += parseInt(price) * parseInt(valueQuantite);
-        console.log(totalPrice);
+        //console.log(totalPrice);
     }
 
     let quantiteTotalProduit = document.getElementById("totalQuantity");
