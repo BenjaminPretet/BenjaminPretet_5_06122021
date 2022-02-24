@@ -107,30 +107,34 @@ function addToCart(e) {
         //condition: si il n'y a pas de produit dans le local storage
        if(produitLocalStorage == null){
             produitLocalStorage = [];
+            produitLocalStorage.push(infoProduit);
        }
        
        //condition: si il y a un produit dans le local storage
        else{
-           
+        //comparatif id et option couleur pour additionné les quantitées
+        
+        const verifProduitPanier = (element) => element.idProduit == idProduct && element.couleurProduit == couleur;
+        let resultVerifProduitPanier = produitLocalStorage.findIndex(verifProduitPanier);
+
+        if(resultVerifProduitPanier != -1){
+            produitLocalStorage[resultVerifProduitPanier].quantiteProduit += quantite;
+        }
+        else{
+            produitLocalStorage.push(infoProduit);
+        }
+        //console.log(produitLocalStorage.findIndex(verifProduitPanier));
+        //console.log(resultVerifProduitPanier); 
        }
-       // inverser les condition => if = null alors crée un tableau
-       produitLocalStorage.push(infoProduit);
+
        localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
        
-       //comparatif id et option couleur pour additionné les quantitées
-       /*if(){
-
-       }
-       else(){
-
-       }*/
-
-       if(window.confirm("Cliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
+       /*if(window.confirm("Cliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
            window.location.href = "cart.html"
        }
        else{
            window.location.href = "index.html"
-       } 
+       } */
    }
    else{
        window.alert("couleur ou quantité non renseigner, veuillez reéssayer !! ")
