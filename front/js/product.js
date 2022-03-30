@@ -31,6 +31,10 @@ fetch("http://localhost:3000/api/products/" + idProduct)
     });
 
 //déclaration de la fonction
+/**
+ * affichage info du produit
+ * @param {Object} data 
+ */
 function product(data) {
     
     document.getElementsByClassName("item__img")[0].innerHTML = `
@@ -65,7 +69,7 @@ btn_envoyerPanier.addEventListener("click", event => addToCart(event));
 
 function addToCart(e) {
     //1 recuperation de donnée
-    let quantite = document.getElementById("quantity").value;
+    let quantite = parseInt(document.getElementById("quantity").value);
 
     let selectionCouleur = document.getElementById("colors");
     let couleur = selectionCouleur.options[selectionCouleur.selectedIndex].value;
@@ -93,7 +97,7 @@ function addToCart(e) {
         couleurProduit:couleur
     };
 
-    console.log(infoProduit);
+    //console.log(infoProduit);
 
     //variable dans laquelle on met les key et les values
     let produitLocalStorage = JSON.parse(localStorage.getItem("produit"))
@@ -103,40 +107,46 @@ function addToCart(e) {
     //création constante de vérification de produit dans le local storage
 
     if(couleur != "" && quantite > 0 && quantite < 100){
-        
+
         //condition: si il n'y a pas de produit dans le local storage
-       if(produitLocalStorage == null){
+        if(produitLocalStorage == null){
             produitLocalStorage = [];
             produitLocalStorage.push(infoProduit);
-       }
+        }
        
-       //condition: si il y a un produit dans le local storage
-       else{
+        //condition: si il y a un produit dans le local storage
+        else{
+
         //comparatif id et option couleur pour additionné les quantitées
-        
         const verifProduitPanier = (element) => element.idProduit == idProduct && element.couleurProduit == couleur;
         let resultVerifProduitPanier = produitLocalStorage.findIndex(verifProduitPanier);
-
+        
         if(resultVerifProduitPanier != -1){
-            produitLocalStorage[resultVerifProduitPanier].quantiteProduit += quantite;
+            //let newQuantite = produitLocalStorage[resultVerifProduitPanier].quantiteProduit
+            //let newQuantiteInt = parseInt(newQuantite)
+            //newQuantiteInt += parseInt(quantite);
+            //console.log(newQuantiteInt);
+            
+            produitLocalStorage[resultVerifProduitPanier].quantiteProduit += (quantite);
+            
         }
         else{
             produitLocalStorage.push(infoProduit);
         }
         //console.log(produitLocalStorage.findIndex(verifProduitPanier));
         //console.log(resultVerifProduitPanier); 
-       }
+        }
 
-       localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+        localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
        
-       /*if(window.confirm("Cliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
+        /*if(window.confirm("Cliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
            window.location.href = "cart.html"
-       }
-       else{
+        }
+        else{
            window.location.href = "index.html"
-       } */
-   }
-   else{
+        } */
+    }
+    else{
        window.alert("couleur ou quantité non renseigner, veuillez reéssayer !! ")
-   }
+    }
 }
