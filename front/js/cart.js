@@ -46,9 +46,13 @@ async function getData(id){
 }
 
 async function init(){
+    let products = []
+
     for(let i = 0; i < produitPanier.length; i++){
         const value = await getData(produitPanier[i].idProduit);
         displayProductPanier(value, produitPanier[i])
+
+        products.push(value);
 
         // test variable pour suppression de produit
         let idSupprime = produitPanier[i].idProduit
@@ -57,14 +61,26 @@ async function init(){
         console.log(couleurSupprime);
         
     } 
-    prixTotal();
+    const btn_supprimeProduit = document.querySelectorAll(".deleteItem");
+    for(let btn of btn_supprimeProduit){
+        btn.addEventListener("click", event => {
+            deleteItem(event)
+            console.log(event.target);
+            console.log(event.target.dataset.id);
+            console.log(event.target.dataset.color);
+        }); 
+    }
+    
+    
+    
+    prixTotal(products);
 }
 init()
 
 //affichage des atricles dans le panier
 async function displayProductPanier(data, infoProduitPanier){
 
-    document.getElementById("cart__items").innerHTML = document.getElementById("cart__items").innerHTML + `
+    document.getElementById("cart__items").innerHTML +=`
         <article class="cart__item" data-id="${infoProduitPanier.idProduit} " data-color="${infoProduitPanier.couleurProduit}">
             <div class="cart__item__img">
                 <img src="${data.imageUrl} " alt="${data.altTxt}">
@@ -81,31 +97,35 @@ async function displayProductPanier(data, infoProduitPanier){
                         <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${infoProduitPanier.quantiteProduit}">
                     </div>
                     <div class="cart__item__content__settings__delete">
-                        <p class="deleteItem">Supprimer</p>
+                        <p class="deleteItem" id="${infoProduitPanier.idProduit}_${infoProduitPanier.couleurProduit}" data-id="${infoProduitPanier.idProduit}" data-color="${infoProduitPanier.couleurProduit}">Supprimer</p>
                     </div>
                 </div>
             </div>
         </article>
     `;
 
-    //Supprimer un article
-    const btn_supprimeProduit = document.querySelectorAll(".deleteItem");
     
-    for(let btn of btn_supprimeProduit){
-        btn.addEventListener("click", event => deleteItem(event));
-        //console.log(btn);
-
-    }
-    
-    function deleteItem(e){
-        console.log("test");
-        
-    }   
-
-    deleteItem();
 }
 
-async function prixTotal(){
+//Supprimer un article
+//console.log(infoProduitPanier);
+
+/**
+ * permet de supprimer un item du panier
+ * parametre : 
+ * -1 id du produit
+ * -2 option de couleur
+ * @param {*} e 
+ */
+function deleteItem(e){
+    // => j'ecrit mon code ici
+console.log("test");
+
+}   
+
+//deleteItem();
+
+async function prixTotal(products){
 
     //calcul de la quantité total d'article et du prix total en fonction du nombre d'articles
     //quantité total
@@ -117,7 +137,18 @@ async function prixTotal(){
     let produitPrice = document.getElementsByClassName("price")
     let totalPrice = 0
 
-    for(let i = 0; i < produitQuantite.length; i++){
+    products.forEach((element, i) => {
+        //console.log(element);
+
+        let valueQuantite = produitQuantite[i].value;
+        totalQuantite += produitQuantite[i].valueAsNumber;
+
+        totalPrice += element.price * parseInt(valueQuantite);
+        
+        
+    });
+
+    /*for(let i = 0; i < produitQuantite.length; i++){
         let valueQuantite = produitQuantite[i].value;
         totalQuantite += produitQuantite[i].valueAsNumber;
 
@@ -130,7 +161,7 @@ async function prixTotal(){
 
         totalPrice += parseInt(price) * parseInt(valueQuantite);
         //console.log(totalPrice);
-    }
+    }*/
 
     let quantiteTotalProduit = document.getElementById("totalQuantity");
     quantiteTotalProduit.innerHTML = totalQuantite;
