@@ -5,9 +5,9 @@ let produitLocalStorage = JSON.parse(localStorage.getItem("produit"))
 //Affichage des produits dans le panier
 
 let produitPanier = produitLocalStorage;
-console.log(produitPanier);
+//console.log(produitPanier);
 
-let tableauPanier = [];
+//let tableauPanier = [];
 
 /*async function getData(){
     for(let i = 0; i < produitPanier.length; i++){
@@ -58,10 +58,10 @@ async function init(){
         let idSupprime = produitPanier[i].idProduit
         let couleurSupprime = produitPanier[i].couleurProduit
         console.log(idSupprime);
-        console.log(couleurSupprime);
-        
+        console.log(couleurSupprime);    
     } 
-    const btn_supprimeProduit = document.querySelectorAll(".deleteItem");
+
+    let btn_supprimeProduit = document.querySelectorAll(".deleteItem");
     for(let btn of btn_supprimeProduit){
         btn.addEventListener("click", event => {
             deleteItem(event)
@@ -117,9 +117,39 @@ async function displayProductPanier(data, infoProduitPanier){
  * -2 option de couleur
  * @param {*} e 
  */
-function deleteItem(e){
-    // => j'ecrit mon code ici
-console.log("test");
+function deleteItem(idProduit,couleurProduit){
+    
+    //let autreProduitSupprime = [];
+    let totalProduitSupprime = produitPanier.length;
+    console.log(totalProduitSupprime);
+
+    if(totalProduitSupprime == 1){
+        return localStorage.removeItem("produit")
+    }
+    else{
+        /*autreProduitSupprime = produitPanier.filter(element => {
+            if(btn_supprimeProduit.dataset.id != element.id || btn_supprimeProduit.dataset.color != element.color){
+                return true
+            }
+        });*/
+        //console.log(autreProduitSupprime);
+    }
+
+    let idSupprime = produitPanier.idProduit
+    let couleurSupprime = produitPanier.couleurProduit
+
+    const verifProduitSupprime = (element) => element.idProduit == idSupprime && element.couleurProduit == couleurSupprime;
+    let resultVerifProduitSupprime = produitLocalStorage.findIndex(verifProduitSupprime);
+    console.log(resultVerifProduitSupprime);
+
+    if(resultVerifProduitSupprime != -1){
+        localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+
+    }
+    else{
+        //localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+    }
+//console.log("test");
 
 }   
 
