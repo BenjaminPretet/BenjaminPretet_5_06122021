@@ -55,19 +55,22 @@ async function init(){
         products.push(value);
 
         // test variable pour suppression de produit
-        let idSupprime = produitPanier[i].idProduit
+        /*let idSupprime = produitPanier[i].idProduit
         let couleurSupprime = produitPanier[i].couleurProduit
         console.log(idSupprime);
-        console.log(couleurSupprime);    
+        console.log(couleurSupprime);*/    
     } 
-
+    console.log(products);
     let btn_supprimeProduit = document.querySelectorAll(".deleteItem");
     for(let btn of btn_supprimeProduit){
         btn.addEventListener("click", event => {
-            deleteItem(event)
-            console.log(event.target);
-            console.log(event.target.dataset.id);
-            console.log(event.target.dataset.color);
+            deleteItem(event.target.dataset.id, event.target.dataset.color)
+            //1- savoir si un produit avec le meme id existe toujours
+            //2- si pas de produit alors ont retir a product le produit avec le meme id
+            //3- appeller prix total avec products
+            const productsFilter = (element) => element._id != event.target.dataset.id || element._id == event.target.dataset.id && element.couleurProduit != event.target.dataset.color;
+            products = products.filter(productsFilter)
+            prixTotal(products);
         }); 
     }
     
@@ -81,7 +84,7 @@ init()
 async function displayProductPanier(data, infoProduitPanier){
 
     document.getElementById("cart__items").innerHTML +=`
-        <article class="cart__item" data-id="${infoProduitPanier.idProduit} " data-color="${infoProduitPanier.couleurProduit}">
+        <article class="cart__item" data-id="${infoProduitPanier.idProduit}" data-color="${infoProduitPanier.couleurProduit}">
             <div class="cart__item__img">
                 <img src="${data.imageUrl} " alt="${data.altTxt}">
             </div>
@@ -118,37 +121,26 @@ async function displayProductPanier(data, infoProduitPanier){
  * @param {*} e 
  */
 function deleteItem(idProduit,couleurProduit){
-    
-    //let autreProduitSupprime = [];
-    let totalProduitSupprime = produitPanier.length;
-    console.log(totalProduitSupprime);
 
-    if(totalProduitSupprime == 1){
-        return localStorage.removeItem("produit")
-    }
-    else{
-        /*autreProduitSupprime = produitPanier.filter(element => {
-            if(btn_supprimeProduit.dataset.id != element.id || btn_supprimeProduit.dataset.color != element.color){
-                return true
-            }
-        });*/
-        //console.log(autreProduitSupprime);
-    }
-
-    let idSupprime = produitPanier.idProduit
-    let couleurSupprime = produitPanier.couleurProduit
-
-    const verifProduitSupprime = (element) => element.idProduit == idSupprime && element.couleurProduit == couleurSupprime;
+    const verifProduitSupprime = (element) => element.idProduit == idProduit && element.couleurProduit == couleurProduit;
     let resultVerifProduitSupprime = produitLocalStorage.findIndex(verifProduitSupprime);
     console.log(resultVerifProduitSupprime);
 
     if(resultVerifProduitSupprime != -1){
+        const productsFilter = (element) => element.idProduit != idProduit || element.idProduit == idProduit && element.couleurProduit != couleurProduit;
+        produitLocalStorage = produitLocalStorage.filter(productsFilter)
         localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+        //recuperation du produit dans le dom pour le supprimé
+
+        const element = document.querySelector(`article[data-id='${idProduit}'][data-color='${couleurProduit}']`);
+        element.remove();
+
 
     }
     else{
         //localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
     }
+
 //console.log("test");
 
 }   
@@ -200,6 +192,66 @@ async function prixTotal(products){
     prixTotalProduit.innerHTML = totalPrice;
     
 }
+
+//formulaire
+
+let btnEnvoyerFormulaire = document.getElementById("order");
+
+//événement au click
+btnEnvoyerFormulaire.addEventListener("click", (e) => {
+    e.preventDefault();
+
+    //regex pour tout les inputs avec condition(error message)
+
+    //récupérations des valeurs du formulaire
+    const contact = {
+        firstName : document.getElementById("firstName").value,
+        lastName : document.getElementById("lastName").value,
+        address : document.getElementById("address").value,
+        city : document.getElementById("city").value,
+        email : document.getElementById("email").value
+    }
+
+    //envoyer les valeurs du formulaire dans le local storage
+    localStorage.setItem("contact", JSON.stringify(contact));
+
+    
+    //mettre le formulaire et les produits dans un objet pour les envoyer vers le serveur
+    let products = []
+
+    for(let i = 0; i < produitLocalStorage.length; i++){
+        const product = produitLocalStorage[i]
+        products.push(product.idProduit)
+    }
+
+    const envoyerInfo = {
+        products,
+        contact,
+    };
+    
+    console.log(envoyerInfo);
+
+    fetch(`http://localhost:3000/api/products/order`, {
+        method: "POST",
+        body: JSON.stringify(envoyerInfo),
+        headers: {
+            "Content-Type" : "application/json",
+        },
+    })
+    
+        .then(function(res) {
+           if (res.ok) {
+               return res.json();
+           } 
+        })
+        .then(function(dataApi) {
+            console.log(dataApi);
+
+            //rediriger vers la page de confirmation
+        })    
+})
+
+
 
 
 
