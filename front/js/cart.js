@@ -335,6 +335,10 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
         })
         .then(function(dataApi) {
             console.log(dataApi);
+            console.log(dataApi.orderId);
+            
+            //mettre l'id dans le local storage
+            localStorage.setItem("idConfirmationCommande", dataApi.orderId);
 
             //rediriger vers la page de confirmation
             window.location.href = "confirmation.html"
