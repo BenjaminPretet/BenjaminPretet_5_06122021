@@ -201,8 +201,6 @@ let btnEnvoyerFormulaire = document.getElementById("order");
 btnEnvoyerFormulaire.addEventListener("click", (e) => {
     e.preventDefault();
 
-    //regex pour tout les inputs avec condition(error message)
-
     //récupérations des valeurs du formulaire
     const contact = {
         firstName : document.getElementById("firstName").value,
@@ -212,8 +210,99 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
         email : document.getElementById("email").value
     }
 
+    //Controle des valeurs du formulaire :
+    //regex pour tout les inputs
+    const regExPrenomNomVille = (value) => {
+        return /^[a-zA-Z\s]{3,30}$/.test(value)
+    }
+
+    const regExAdresse = (value) => {
+        return /^[0-9a-zA-Z\s]{3,50}$/.test(value)
+    }
+
+    const regExEmail = (value) => {
+        return /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/.test(value)
+    }
+
+    //controle des valeurs du formulaire avec message d'érreur
+    function controlePrenom(){
+        const firstName = document.getElementById("firstName").value;
+        if(regExPrenomNomVille(firstName)){
+        console.log("OK");
+        return true;
+        }else{
+        console.log("KO");
+        alert("les chiffres et les symboles ne sont pas autorisé");
+        return false;
+        };
+    };
+
+    function controleNom(){
+        const lastName = document.getElementById("lastName").value;
+        if(regExPrenomNomVille(lastName)){
+        console.log("OK");
+        return true;
+        }else{
+        console.log("KO");
+        alert("les chiffres et les symboles ne sont pas autorisé");
+        return false;
+        };
+    };
+
+    function controleAdresse(){
+        const address = document.getElementById("address").value;
+        if(regExAdresse(address)){
+        console.log("OK");
+        return true;
+        }else{
+        console.log("KO");
+        alert("les symboles ne sont pas autorisé");
+        return false;
+        };
+    };
+
+    function controleVille(){
+        const city = document.getElementById("city").value;
+        if(regExPrenomNomVille(city)){
+        console.log("OK");
+        return true;
+        }else{
+        console.log("KO");
+        alert("les chiffres et les symboles ne sont pas autorisé");
+        return false;
+        };
+    };
+
+    function controleEmail(){
+        const email = document.getElementById("email").value;
+        if(regExEmail(email)){
+        console.log("OK");
+        return true;
+        }else{
+        console.log("KO");
+        alert("Veuillez corriger votre adresse email");
+        return false;
+        };
+    };
+
     //envoyer les valeurs du formulaire dans le local storage
-    localStorage.setItem("contact", JSON.stringify(contact));
+    if(controlePrenom() && controleNom() && controleAdresse && controleVille () && controleEmail()){
+        localStorage.setItem("contact", JSON.stringify(contact));
+        /*console.log(controlePrenom());
+        console.log(controleNom());
+        console.log(controleAdresse());
+        console.log(controleVille());
+        console.log(controleEmail());*/
+
+    }else{
+        alert("Veuillez remplir le formulaire correctement");
+        /*console.log(controlePrenom());
+        console.log(controleNom());
+        console.log(controleAdresse());
+        console.log(controleVille());
+        console.log(controleEmail());*/
+    }
+    //localStorage.setItem("contact", JSON.stringify(contact));
 
     
     //mettre le formulaire et les produits dans un objet pour les envoyer vers le serveur
@@ -248,6 +337,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
             console.log(dataApi);
 
             //rediriger vers la page de confirmation
+            window.location.href = "confirmation.html"
         })    
 })
 
