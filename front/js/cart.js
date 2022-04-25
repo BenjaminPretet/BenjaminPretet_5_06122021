@@ -97,7 +97,7 @@ async function displayProductPanier(data, infoProduitPanier){
                 <div class="cart__item__content__settings">
                     <div class="cart__item__content__settings__quantity">
                         <p>Qté : </p>
-                        <input type="number" class="itemQuantity" name="itemQuantity" min="1" max="100" value="${infoProduitPanier.quantiteProduit}">
+                        <input type="number" class="itemQuantity" name="itemQuantity" min="0" max="100" value="${infoProduitPanier.quantiteProduit}">
                     </div>
                     <div class="cart__item__content__settings__delete">
                         <p class="deleteItem" id="${infoProduitPanier.idProduit}_${infoProduitPanier.couleurProduit}" data-id="${infoProduitPanier.idProduit}" data-color="${infoProduitPanier.couleurProduit}">Supprimer</p>
@@ -107,9 +107,37 @@ async function displayProductPanier(data, infoProduitPanier){
         </article>
     `;
 
+    console.log('test');
+    const element = document.querySelector(`article[data-id='${infoProduitPanier.idProduit}'][data-color='${infoProduitPanier.couleurProduit}']`);
+    const input = element.querySelector("input");
+    input.addEventListener("change",(e) =>{
+        const nombreArticle = parseInt(e.target.value);
+        if(nombreArticle === 0){
+            deleteItem(infoProduitPanier.idProduit,infoProduitPanier.couleurProduit)
+            
+        }else if(nombreArticle > 0){
+            updateQuantityProduct(infoProduitPanier.idProduit,infoProduitPanier.couleurProduit,nombreArticle)
+        }
+        prixTotal()
+    })
     
 }
 
+function updateQuantityProduct(idProduit,couleurProduit,quantiteProduit){
+    const verifProduitMaj = (element) => element.idProduit == idProduit && element.couleurProduit == couleurProduit;
+    let resultVerifProduitMaj = produitLocalStorage.findIndex(verifProduitMaj);
+
+    if(resultVerifProduitMaj != -1){
+        for(let i = 0; i < produitLocalStorage.length; i++){
+            let produit = produitLocalStorage[i];
+            if(produit.idProduit === idProduit && produit.couleurProduit === couleurProduit){
+                produit.quantiteProduit = quantiteProduit
+                console.log("coucou");
+            }
+        }
+        localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
+    }
+}
 //Supprimer un article
 //console.log(infoProduitPanier);
 
@@ -135,13 +163,12 @@ function deleteItem(idProduit,couleurProduit){
         const element = document.querySelector(`article[data-id='${idProduit}'][data-color='${couleurProduit}']`);
         element.remove();
 
-
     }
     else{
         //localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
     }
 
-//console.log("test");
+    //console.log("test");
 
 }   
 
@@ -152,14 +179,14 @@ async function prixTotal(products){
     //calcul de la quantité total d'article et du prix total en fonction du nombre d'articles
     //quantité total
     let produitQuantite = document.getElementsByClassName("itemQuantity");
-    let totalQuantite = 0;
+    let totalQuantite = 0
     //console.log(produitQuantite);
 
     //prix total
     let produitPrice = document.getElementsByClassName("price")
     let totalPrice = 0
 
-    products.forEach((element, i) => {
+    /*products.forEach((element, i) => {
         //console.log(element);
 
         let valueQuantite = produitQuantite[i].value;
@@ -168,9 +195,9 @@ async function prixTotal(products){
         totalPrice += element.price * parseInt(valueQuantite);
         
         
-    });
+    });*/
 
-    /*for(let i = 0; i < produitQuantite.length; i++){
+    for(let i = 0; i < produitQuantite.length; i++){
         let valueQuantite = produitQuantite[i].value;
         totalQuantite += produitQuantite[i].valueAsNumber;
 
@@ -183,7 +210,7 @@ async function prixTotal(products){
 
         totalPrice += parseInt(price) * parseInt(valueQuantite);
         //console.log(totalPrice);
-    }*/
+    }
 
     let quantiteTotalProduit = document.getElementById("totalQuantity");
     quantiteTotalProduit.innerHTML = totalQuantite;
@@ -252,36 +279,36 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     function controleAdresse(){
         const address = document.getElementById("address").value;
         if(regExAdresse(address)){
-        console.log("OK");
-        return true;
+            console.log("OK");
+            return true;
         }else{
         console.log("KO");
-        alert("les symboles ne sont pas autorisé");
-        return false;
+            alert("les symboles ne sont pas autorisé");
+            return false;
         };
     };
 
     function controleVille(){
         const city = document.getElementById("city").value;
         if(regExPrenomNomVille(city)){
-        console.log("OK");
-        return true;
+            console.log("OK");
+            return true;
         }else{
-        console.log("KO");
-        alert("les chiffres et les symboles ne sont pas autorisé");
-        return false;
+            console.log("KO");
+            alert("les chiffres et les symboles ne sont pas autorisé");
+            return false;
         };
     };
 
     function controleEmail(){
         const email = document.getElementById("email").value;
         if(regExEmail(email)){
-        console.log("OK");
-        return true;
+            console.log("OK");
+            return true;
         }else{
-        console.log("KO");
-        alert("Veuillez corriger votre adresse email");
-        return false;
+            console.log("KO");
+            alert("Veuillez corriger votre adresse email");
+            return false;
         };
     };
 
