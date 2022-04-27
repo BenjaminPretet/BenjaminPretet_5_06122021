@@ -255,24 +255,24 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     function controlePrenom(){
         const firstName = document.getElementById("firstName").value;
         if(regExPrenomNomVille(firstName)){
-        console.log("OK");
-        return true;
+            console.log("OK");
+            return true;
         }else{
-        console.log("KO");
-        alert("les chiffres et les symboles ne sont pas autorisé");
-        return false;
+            console.log("KO");
+            alert("les chiffres et les symboles ne sont pas autorisé");
+            return false;
         };
     };
 
     function controleNom(){
         const lastName = document.getElementById("lastName").value;
         if(regExPrenomNomVille(lastName)){
-        console.log("OK");
-        return true;
+            console.log("OK");
+            return true;
         }else{
-        console.log("KO");
-        alert("les chiffres et les symboles ne sont pas autorisé");
-        return false;
+            console.log("KO");
+            alert("les chiffres et les symboles ne sont pas autorisé");
+            return false;
         };
     };
 
@@ -282,7 +282,7 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
             console.log("OK");
             return true;
         }else{
-        console.log("KO");
+            console.log("KO");
             alert("les symboles ne sont pas autorisé");
             return false;
         };
@@ -329,8 +329,6 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
         console.log(controleVille());
         console.log(controleEmail());*/
     }
-    //localStorage.setItem("contact", JSON.stringify(contact));
-
     
     //mettre le formulaire et les produits dans un objet pour les envoyer vers le serveur
     let products = []

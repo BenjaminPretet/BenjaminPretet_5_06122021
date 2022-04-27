@@ -139,12 +139,12 @@ function addToCart(e) {
 
         localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
        
-        /*if(window.confirm("Cliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
+        if(window.confirm("Votre article a bien été sélectionner \nCliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
            window.location.href = "cart.html"
         }
         else{
            window.location.href = "index.html"
-        } */
+        } 
     }
     else{
        window.alert("couleur ou quantité non renseigner, veuillez reéssayer !! ")
