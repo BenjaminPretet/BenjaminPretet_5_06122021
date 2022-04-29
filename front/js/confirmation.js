@@ -1,7 +1,6 @@
 //Récupération de l'id de la commande dans le local storage
-/*const idCommandeConfirme = localStorage.getItem("idConfirmationCommande");
-console.log(`idCommandeConfirme : ${idCommandeConfirme}`);
+const id = new URL(window.location.href).searchParams.get("id");
+console.log(id);
 
-document.getElementById("orderId").innerHTML = `
-${idCommandeConfirme}
-`*/
+const orderId = document.getElementById('orderId');
+orderId.innerHTML = id;
