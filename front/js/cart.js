@@ -1,32 +1,11 @@
 //Récupération des informations dans le local storage
 let produitLocalStorage = JSON.parse(localStorage.getItem("produit"))
-//console.log(produitLocalStorage);
 
 //Affichage des produits dans le panier
 
 let produitPanier = produitLocalStorage;
-//console.log(produitPanier);
 
-//let tableauPanier = [];
-
-/*async function getData(){
-    for(let i = 0; i < produitPanier.length; i++){
-
-        fetch(`http://localhost:3000/api/products/${produitPanier[i].idProduit}`)
-            .then(function(res){
-                if (res.ok) {
-                    return res.json();
-                }
-            })
-            .then(function(value) {
-                displayProductPanier(value, produitPanier[i]);
-            })
-            .catch(function(err){
-                console.log(err);
-            });
-    }
-}*/
-
+//Récupération d'un produit
 async function getData(id){
         const data = await fetch(`http://localhost:3000/api/products/${id}`)
             .then(function(res){
@@ -53,14 +32,8 @@ async function init(){
         displayProductPanier(value, produitPanier[i])
 
         products.push(value);
-
-        // test variable pour suppression de produit
-        /*let idSupprime = produitPanier[i].idProduit
-        let couleurSupprime = produitPanier[i].couleurProduit
-        console.log(idSupprime);
-        console.log(couleurSupprime);*/    
     } 
-    console.log(products);
+    
     let btn_supprimeProduit = document.querySelectorAll(".deleteItem");
     for(let btn of btn_supprimeProduit){
         btn.addEventListener("click", event => {
@@ -70,17 +43,17 @@ async function init(){
             //3- appeller prix total avec products
             const productsFilter = (element) => element._id != event.target.dataset.id || element._id == event.target.dataset.id && element.couleurProduit != event.target.dataset.color;
             products = products.filter(productsFilter)
-            prixTotal(products);
+            prixTotal();
         }); 
     }
     
     
     
-    prixTotal(products);
+    prixTotal();
 }
 init()
 
-//affichage des atricles dans le panier
+//affichage des articles dans le panier
 async function displayProductPanier(data, infoProduitPanier){
 
     document.getElementById("cart__items").innerHTML +=`
@@ -107,7 +80,6 @@ async function displayProductPanier(data, infoProduitPanier){
         </article>
     `;
 
-    console.log('test');
     const element = document.querySelector(`article[data-id='${infoProduitPanier.idProduit}'][data-color='${infoProduitPanier.couleurProduit}']`);
     const input = element.querySelector("input");
     input.addEventListener("change",(e) =>{
@@ -123,6 +95,7 @@ async function displayProductPanier(data, infoProduitPanier){
     
 }
 
+//Mise a jour de la quantité de produits
 function updateQuantityProduct(idProduit,couleurProduit,quantiteProduit){
     const verifProduitMaj = (element) => element.idProduit == idProduit && element.couleurProduit == couleurProduit;
     let resultVerifProduitMaj = produitLocalStorage.findIndex(verifProduitMaj);
@@ -132,21 +105,16 @@ function updateQuantityProduct(idProduit,couleurProduit,quantiteProduit){
             let produit = produitLocalStorage[i];
             if(produit.idProduit === idProduit && produit.couleurProduit === couleurProduit){
                 produit.quantiteProduit = quantiteProduit
-                console.log("coucou");
             }
         }
         localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
     }
 }
-//Supprimer un article
-//console.log(infoProduitPanier);
 
 /**
  * permet de supprimer un item du panier
- * parametre : 
- * -1 id du produit
- * -2 option de couleur
- * @param {*} e 
+ * @param {Number} idProduit
+ * @param {String} couleurProduit
  */
 function deleteItem(idProduit,couleurProduit){
 
@@ -164,17 +132,9 @@ function deleteItem(idProduit,couleurProduit){
         element.remove();
 
     }
-    else{
-        //localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
-    }
-
-    //console.log("test");
-
 }   
 
-//deleteItem();
-
-async function prixTotal(products){
+async function prixTotal(){
 
     //calcul de la quantité total d'article et du prix total en fonction du nombre d'articles
     //quantité total
@@ -186,17 +146,6 @@ async function prixTotal(products){
     let produitPrice = document.getElementsByClassName("price")
     let totalPrice = 0
 
-    /*products.forEach((element, i) => {
-        //console.log(element);
-
-        let valueQuantite = produitQuantite[i].value;
-        totalQuantite += produitQuantite[i].valueAsNumber;
-
-        totalPrice += element.price * parseInt(valueQuantite);
-        
-        
-    });*/
-
     for(let i = 0; i < produitQuantite.length; i++){
         let valueQuantite = produitQuantite[i].value;
         totalQuantite += produitQuantite[i].valueAsNumber;
@@ -204,12 +153,7 @@ async function prixTotal(products){
         let valuePrice = produitPrice[i].innerHTML;
         let price = valuePrice.replace(" €", "");
         
-        //console.log(valueQuantite);
-        //console.log(valuePrice);
-        //console.log(parseInt(price) * parseInt(valueQuantite));
-
         totalPrice += parseInt(price) * parseInt(valueQuantite);
-        //console.log(totalPrice);
     }
 
     let quantiteTotalProduit = document.getElementById("totalQuantity");
@@ -259,6 +203,8 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
             return true;
         }else{
             console.log("KO");
+            //get element
+            //innerHTML
             alert("les chiffres et les symboles ne sont pas autorisé");
             return false;
         };
@@ -315,43 +261,28 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     //envoyer les valeurs du formulaire dans le local storage
     if(controlePrenom() && controleNom() && controleAdresse && controleVille () && controleEmail()){
         localStorage.setItem("contact", JSON.stringify(contact));
-        /*console.log(controlePrenom());
-        console.log(controleNom());
-        console.log(controleAdresse());
-        console.log(controleVille());
-        console.log(controleEmail());*/
 
-    }else{
-        alert("Veuillez remplir le formulaire correctement");
-        /*console.log(controlePrenom());
-        console.log(controleNom());
-        console.log(controleAdresse());
-        console.log(controleVille());
-        console.log(controleEmail());*/
-    }
+        let products = []
+
+        for(let i = 0; i < produitLocalStorage.length; i++){
+            const product = produitLocalStorage[i]
+            products.push(product.idProduit)
+        }   
+
+        const envoyerInfo = {
+            products,
+            contact,
+        };
     
-    //mettre le formulaire et les produits dans un objet pour les envoyer vers le serveur
-    let products = []
-
-    for(let i = 0; i < produitLocalStorage.length; i++){
-        const product = produitLocalStorage[i]
-        products.push(product.idProduit)
-    }
-
-    const envoyerInfo = {
-        products,
-        contact,
-    };
     
-    console.log(envoyerInfo);
 
-    fetch(`http://localhost:3000/api/products/order`, {
-        method: "POST",
-        body: JSON.stringify(envoyerInfo),
-        headers: {
-            "Content-Type" : "application/json",
-        },
-    })
+        fetch(`http://localhost:3000/api/products/order`, {
+            method: "POST",
+            body: JSON.stringify(envoyerInfo),
+            headers: {
+                "Content-Type" : "application/json",
+            },
+        })
     
         .then(function(res) {
            if (res.ok) {
@@ -359,12 +290,13 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
            } 
         })
         .then(function(dataApi) {
-            console.log(dataApi);
-            console.log(dataApi.orderId);
-            
             //rediriger vers la page de confirmation
             window.location.href = "confirmation.html?id="+ dataApi.orderId;
-        })    
+        })
+    
+    }else{
+        alert("Veuillez remplir le formulaire correctement");
+    }
 })
 
 

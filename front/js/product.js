@@ -1,16 +1,9 @@
 //récupération de la chaine de requête dans l'url
 const queryString_url_id = window.location.search;
-console.log(queryString_url_id);
 
-//Méthode 1(slice) extraction id
-//const idProduct = queryString_url_id.slice(4)
-//console.log(idProduct);
-
-
-//Méthode 2(URLsearchParams) extraction id
+//Méthode (URLsearchParams) extraction id
 
 const urlSearchParams = new URLSearchParams(queryString_url_id);
-console.log(urlSearchParams);
 
 const idProduct = urlSearchParams.get("id")
 
@@ -47,13 +40,6 @@ function product(data) {
     document.getElementById("description").innerHTML = `
         <p id="description">${data.description}</p>
     `
-
-    /*for (let i = 0; i < data.colors.length; i++) {
-        console.log(data.colors[i]);
-        
-        document.getElementById("colors").innerHTML = document.getElementById("colors").innerHTML + `<option value="${data.colors[i]}">${data.colors[i]}</option>`;
-    }*/
-
     document.getElementById("colors").innerHTML += data.colors.map((data) => `
         <option value="${data}">${data}</option>
         
@@ -75,20 +61,16 @@ function addToCart(e) {
     let couleur = selectionCouleur.options[selectionCouleur.selectedIndex].value;
     
     //2 control des données
-    /*if (couleur == "") {
+    if (couleur == "") {
         window.alert("Séléctionnez une couleur")
+        return;
     }
-    else {
-        window.alert("Merci d'avoir renseignez la couleur")
-    }
-
-    if (quantite > 0 && quantite < 100) {
-        window.alert("Merci d'avoir renseignez la quantité")
-    }
-    else {
-        window.alert("Séléctionnez une quantité, SVP")
-    }*/
     
+    if (quantite <= 0 || quantite > 100) {
+        window.alert("Séléctionnez une quantité, SVP")
+    }
+    
+
     //3 local storage
     //information et options produit
     let infoProduit = {
@@ -96,8 +78,6 @@ function addToCart(e) {
         quantiteProduit:quantite,
         couleurProduit:couleur
     };
-
-    //console.log(infoProduit);
 
     //variable dans laquelle on met les key et les values
     let produitLocalStorage = JSON.parse(localStorage.getItem("produit"))
@@ -117,24 +97,18 @@ function addToCart(e) {
         //condition: si il y a un produit dans le local storage
         else{
 
-        //comparatif id et option couleur pour additionné les quantitées
-        const verifProduitPanier = (element) => element.idProduit == idProduct && element.couleurProduit == couleur;
-        let resultVerifProduitPanier = produitLocalStorage.findIndex(verifProduitPanier);
-        
-        if(resultVerifProduitPanier != -1){
-            //let newQuantite = produitLocalStorage[resultVerifProduitPanier].quantiteProduit
-            //let newQuantiteInt = parseInt(newQuantite)
-            //newQuantiteInt += parseInt(quantite);
-            //console.log(newQuantiteInt);
+            //comparatif id et option couleur pour additionné les quantitées
+            const verifProduitPanier = (element) => element.idProduit == idProduct && element.couleurProduit == couleur;
+            let resultVerifProduitPanier = produitLocalStorage.findIndex(verifProduitPanier);
             
-            produitLocalStorage[resultVerifProduitPanier].quantiteProduit += (quantite);
+            if(resultVerifProduitPanier != -1){
+                produitLocalStorage[resultVerifProduitPanier].quantiteProduit += (quantite);
+                
+            }
+            else{
+                produitLocalStorage.push(infoProduit);
+            }
             
-        }
-        else{
-            produitLocalStorage.push(infoProduit);
-        }
-        //console.log(produitLocalStorage.findIndex(verifProduitPanier));
-        //console.log(resultVerifProduitPanier); 
         }
 
         localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
