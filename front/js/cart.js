@@ -199,13 +199,11 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     function controlePrenom(){
         const firstName = document.getElementById("firstName").value;
         if(regExPrenomNomVille(firstName)){
-            console.log("OK");
             return true;
         }else{
-            console.log("KO");
-            //get element
-            //innerHTML
-            alert("les chiffres et les symboles ne sont pas autorisé");
+            document.getElementById("firstNameErrorMsg").innerHTML +=`
+            <p>Les chiffres et les caractères spéciaux ne sont pas autorisé</p>
+            `
             return false;
         };
     };
@@ -213,11 +211,11 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     function controleNom(){
         const lastName = document.getElementById("lastName").value;
         if(regExPrenomNomVille(lastName)){
-            console.log("OK");
             return true;
         }else{
-            console.log("KO");
-            alert("les chiffres et les symboles ne sont pas autorisé");
+            document.getElementById("lastNameErrorMsg").innerHTML +=`
+            <p>Les chiffres et les caractères spéciaux ne sont pas autorisé</p>
+            `
             return false;
         };
     };
@@ -225,10 +223,11 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     function controleAdresse(){
         const address = document.getElementById("address").value;
         if(regExAdresse(address)){
-            console.log("OK");
             return true;
         }else{
-            console.log("KO");
+            document.getElementById("addressErrorMsg").innerHTML +=`
+            <p>Les caractères spéciaux ne sont pas autorisé</p>
+            `
             alert("les symboles ne sont pas autorisé");
             return false;
         };
@@ -237,11 +236,11 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     function controleVille(){
         const city = document.getElementById("city").value;
         if(regExPrenomNomVille(city)){
-            console.log("OK");
             return true;
         }else{
-            console.log("KO");
-            alert("les chiffres et les symboles ne sont pas autorisé");
+            document.getElementById("cityErrorMsg").innerHTML +=`
+            <p>Les chiffres et les caractères spéciaux ne sont pas autorisé</p>
+            `
             return false;
         };
     };
@@ -249,11 +248,11 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
     function controleEmail(){
         const email = document.getElementById("email").value;
         if(regExEmail(email)){
-            console.log("OK");
             return true;
         }else{
-            console.log("KO");
-            alert("Veuillez corriger votre adresse email");
+            document.getElementById("emailErrorMsg").innerHTML +=`
+            <p>Veuillez renseigner correctement votre adresse email</p>
+            `
             return false;
         };
     };
