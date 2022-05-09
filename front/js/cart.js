@@ -228,7 +228,6 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
             document.getElementById("addressErrorMsg").innerHTML +=`
             <p>Les caractères spéciaux ne sont pas autorisé</p>
             `
-            alert("les symboles ne sont pas autorisé");
             return false;
         };
     };
