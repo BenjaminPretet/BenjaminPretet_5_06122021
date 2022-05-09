@@ -86,11 +86,13 @@ async function displayProductPanier(data, infoProduitPanier){
         const nombreArticle = parseInt(e.target.value);
         if(nombreArticle === 0){
             deleteItem(infoProduitPanier.idProduit,infoProduitPanier.couleurProduit)
-            
+
+            prixTotal()
         }else if(nombreArticle > 0){
             updateQuantityProduct(infoProduitPanier.idProduit,infoProduitPanier.couleurProduit,nombreArticle)
+
+            prixTotal()
         }
-        prixTotal()
     })
     
 }
@@ -168,6 +170,100 @@ async function prixTotal(){
 
 let btnEnvoyerFormulaire = document.getElementById("order");
 
+//regex pour tout les inputs
+const regExPrenomNomVille = (value) => {
+    return /^[a-zA-Z\s]{3,30}$/.test(value)
+}
+
+const regExAdresse = (value) => {
+    return /^[0-9a-zA-Z\s]{3,50}$/.test(value)
+}
+
+const regExEmail = (value) => {
+    return /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/.test(value)
+}
+
+function controlFirstName(){
+    const firstName = document.getElementById("firstName").value;
+        if(regExPrenomNomVille(firstName)){
+            document.getElementById("firstNameErrorMsg").innerHTML = '';
+            return true;
+        }else{
+            document.getElementById("firstNameErrorMsg").innerHTML =`
+            <p>Les chiffres et les caractères spéciaux ne sont pas autorisé</p>
+            `
+            return false;
+        };
+};
+
+function controlLastName(){
+    const lastName = document.getElementById("lastName").value;
+    if(regExPrenomNomVille(lastName)){
+        document.getElementById("lastNameErrorMsg").innerHTML = '';
+        return true;
+    }else{
+        document.getElementById("lastNameErrorMsg").innerHTML =`
+        <p>Les chiffres et les caractères spéciaux ne sont pas autorisé</p>
+        `
+        return false;
+    };
+};
+
+function controlAdress(){
+    const address = document.getElementById("address").value;
+    if(regExAdresse(address)){
+        document.getElementById("addressErrorMsg").innerHTML = '';
+        return true;
+    }else{
+        document.getElementById("addressErrorMsg").innerHTML =`
+        <p>Les caractères spéciaux ne sont pas autorisé</p>
+        `
+        return false;
+    };
+};
+
+function controlCity(){
+    const city = document.getElementById("city").value;
+    if(regExPrenomNomVille(city)){
+        document.getElementById("cityErrorMsg").innerHTML = '';
+        return true;
+    }else{
+        document.getElementById("cityErrorMsg").innerHTML =`
+        <p>Les chiffres et les caractères spéciaux ne sont pas autorisé</p>
+        `
+        return false;
+    };
+};
+
+function controlEmail(){
+    const email = document.getElementById("email").value;
+    if(regExEmail(email)){
+        document.getElementById("emailErrorMsg").innerHTML = '';
+        return true;
+    }else{
+        document.getElementById("emailErrorMsg").innerHTML =`
+        <p>Veuillez renseigner correctement votre adresse email</p>
+        `
+        return false;
+    };
+};
+
+document.getElementById("firstName").addEventListener('input',(e) =>{
+    controlFirstName();
+})
+document.getElementById("lastName").addEventListener('input',(e) =>{
+    controlLastName();
+})
+document.getElementById("address").addEventListener('input',(e) =>{
+    controlAdress();
+})
+document.getElementById("city").addEventListener('input',(e) =>{
+    controlCity();
+})
+document.getElementById("email").addEventListener('input',(e) =>{
+    controlEmail();
+})
+
 //événement au click
 btnEnvoyerFormulaire.addEventListener("click", (e) => {
     e.preventDefault();
@@ -181,83 +277,8 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
         email : document.getElementById("email").value
     }
 
-    //Controle des valeurs du formulaire :
-    //regex pour tout les inputs
-    const regExPrenomNomVille = (value) => {
-        return /^[a-zA-Z\s]{3,30}$/.test(value)
-    }
-
-    const regExAdresse = (value) => {
-        return /^[0-9a-zA-Z\s]{3,50}$/.test(value)
-    }
-
-    const regExEmail = (value) => {
-        return /^[a-zA-Z0-9.-_]+[@]{1}[a-zA-Z0-9.-_]+[.]{1}[a-z]{2,10}$/.test(value)
-    }
-
-    //controle des valeurs du formulaire avec message d'érreur
-    function controlePrenom(){
-        const firstName = document.getElementById("firstName").value;
-        if(regExPrenomNomVille(firstName)){
-            return true;
-        }else{
-            document.getElementById("firstNameErrorMsg").innerHTML +=`
-            <p>Les chiffres et les caractères spéciaux ne sont pas autorisé</p>
-            `
-            return false;
-        };
-    };
-
-    function controleNom(){
-        const lastName = document.getElementById("lastName").value;
-        if(regExPrenomNomVille(lastName)){
-            return true;
-        }else{
-            document.getElementById("lastNameErrorMsg").innerHTML +=`
-            <p>Les chiffres et les caractères spéciaux ne sont pas autorisé</p>
-            `
-            return false;
-        };
-    };
-
-    function controleAdresse(){
-        const address = document.getElementById("address").value;
-        if(regExAdresse(address)){
-            return true;
-        }else{
-            document.getElementById("addressErrorMsg").innerHTML +=`
-            <p>Les caractères spéciaux ne sont pas autorisé</p>
-            `
-            return false;
-        };
-    };
-
-    function controleVille(){
-        const city = document.getElementById("city").value;
-        if(regExPrenomNomVille(city)){
-            return true;
-        }else{
-            document.getElementById("cityErrorMsg").innerHTML +=`
-            <p>Les chiffres et les caractères spéciaux ne sont pas autorisé</p>
-            `
-            return false;
-        };
-    };
-
-    function controleEmail(){
-        const email = document.getElementById("email").value;
-        if(regExEmail(email)){
-            return true;
-        }else{
-            document.getElementById("emailErrorMsg").innerHTML +=`
-            <p>Veuillez renseigner correctement votre adresse email</p>
-            `
-            return false;
-        };
-    };
-
     //envoyer les valeurs du formulaire dans le local storage
-    if(controlePrenom() && controleNom() && controleAdresse && controleVille () && controleEmail()){
+    if(controlFirstName() && controlLastName() && controlAdress() && controlCity() && controlEmail()){
         localStorage.setItem("contact", JSON.stringify(contact));
 
         let products = []
@@ -271,8 +292,6 @@ btnEnvoyerFormulaire.addEventListener("click", (e) => {
             products,
             contact,
         };
-    
-    
 
         fetch(`http://localhost:3000/api/products/order`, {
             method: "POST",
