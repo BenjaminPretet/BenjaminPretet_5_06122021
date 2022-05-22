@@ -34,6 +34,22 @@ async function init(){
         products.push(value);
     } 
     
+    document.querySelectorAll(`article[data-id][data-color]`).forEach(article =>{
+        const input = article.querySelector("input");
+        input.addEventListener("change",(e) =>{
+            const nombreArticle = parseInt(e.target.value);
+            if(nombreArticle === 0){
+                deleteItem(article.dataset.id, article.dataset.color)
+    
+                prixTotal()
+            }else if(nombreArticle > 0){
+                updateQuantityProduct(article.dataset.id, article.dataset.color,nombreArticle)
+    
+                prixTotal()
+            }
+        })
+    })
+
     let btn_supprimeProduit = document.querySelectorAll(".deleteItem");
     for(let btn of btn_supprimeProduit){
         btn.addEventListener("click", event => {
@@ -79,22 +95,6 @@ async function displayProductPanier(data, infoProduitPanier){
             </div>
         </article>
     `;
-
-    const element = document.querySelector(`article[data-id='${infoProduitPanier.idProduit}'][data-color='${infoProduitPanier.couleurProduit}']`);
-    const input = element.querySelector("input");
-    input.addEventListener("change",(e) =>{
-        const nombreArticle = parseInt(e.target.value);
-        if(nombreArticle === 0){
-            deleteItem(infoProduitPanier.idProduit,infoProduitPanier.couleurProduit)
-
-            prixTotal()
-        }else if(nombreArticle > 0){
-            updateQuantityProduct(infoProduitPanier.idProduit,infoProduitPanier.couleurProduit,nombreArticle)
-
-            prixTotal()
-        }
-    })
-    
 }
 
 //Mise a jour de la quantité de produits
