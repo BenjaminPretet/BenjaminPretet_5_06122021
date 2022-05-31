@@ -92,6 +92,7 @@ function addToCart(e) {
         if(produitLocalStorage == null){
             produitLocalStorage = [];
             produitLocalStorage.push(infoProduit);
+            
         }
        
         //condition: si il y a un produit dans le local storage
@@ -105,10 +106,16 @@ function addToCart(e) {
                 let quantiteMaxLocalStorage = produitLocalStorage[resultVerifProduitPanier].quantiteProduit + (quantite);
                 if(quantiteMaxLocalStorage <= 100){
                     produitLocalStorage[resultVerifProduitPanier].quantiteProduit += (quantite);
-                    
+
+                    if(window.confirm("Votre article a bien été sélectionner \nCliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
+                        window.location.href = "cart.html"
+                    }
+                     else{
+                        window.location.href = "index.html"
+                    } 
                 }
                 else{
-
+                    window.alert("La quantité dans votre panier dépasse la limite de 100 pour 1 article")
                 }
                 
                 
@@ -120,13 +127,6 @@ function addToCart(e) {
         }
 
         localStorage.setItem("produit", JSON.stringify(produitLocalStorage));
-       
-        if(window.confirm("Votre article a bien été sélectionner \nCliquez sur OK pour allez au panier. \nCliquez sur Annuler pour revenir a l'accueil.")){
-           window.location.href = "cart.html"
-        }
-        else{
-           window.location.href = "index.html"
-        } 
     }
     else{
        window.alert("couleur ou quantité non renseigner, veuillez reéssayer !! ")
