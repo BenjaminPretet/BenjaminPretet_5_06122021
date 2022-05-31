@@ -42,7 +42,7 @@ async function init(){
                 deleteItem(article.dataset.id, article.dataset.color)
     
                 prixTotal()
-            }else if(nombreArticle > 0){
+            }else if(nombreArticle > 0 || nombreArticle > 100){
                 updateQuantityProduct(article.dataset.id, article.dataset.color,nombreArticle)
     
                 prixTotal()

@@ -102,7 +102,15 @@ function addToCart(e) {
             let resultVerifProduitPanier = produitLocalStorage.findIndex(verifProduitPanier);
             
             if(resultVerifProduitPanier != -1){
-                produitLocalStorage[resultVerifProduitPanier].quantiteProduit += (quantite);
+                let quantiteMaxLocalStorage = produitLocalStorage[resultVerifProduitPanier].quantiteProduit + (quantite);
+                if(quantiteMaxLocalStorage <= 100){
+                    produitLocalStorage[resultVerifProduitPanier].quantiteProduit += (quantite);
+                    
+                }
+                else{
+
+                }
+                
                 
             }
             else{
